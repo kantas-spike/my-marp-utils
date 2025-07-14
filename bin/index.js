@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 "use strict";
 import { Marpit } from "@marp-team/marpit";
 import fs from "node:fs";
