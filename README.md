@@ -2,6 +2,24 @@
 
 Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換するCLIツールです.
 
+## インストール
+
+```shell
+$ npm install -g .
+$ marp2vvtext -h
+Usage: marp2vvtext [options] <marp_file_path>
+
+Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する
+
+Arguments:
+  marp_file_path              原稿となるMarpファイルパス
+
+Options:
+  -c, --config <config_path>  音声キャラクターの設定ファイルパス (default: "./vox.json")
+  -o, --output <output_path>  VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する
+  -h, --help                  display help for command
+```
+
 ## 使い方
 
 ```shell
