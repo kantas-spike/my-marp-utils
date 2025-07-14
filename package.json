@@ -1,0 +1,19 @@
+{
+  "name": "marp2vvtext",
+  "version": "1.0.0",
+  "description": "VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する",
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "main": "bin/index.js",
+  "bin": {
+    "marp2vvtext": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@marp-team/marpit": "^3.1.3",
+    "commander": "^14.0.0"
+  }
+}
