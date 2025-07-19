@@ -5,6 +5,7 @@ import { Marpit } from "@marp-team/marpit";
 import fs from "node:fs";
 import path from "node:path";
 import { program } from "commander";
+import { createRequire } from "node:module";
 
 function getVoxConfig(configPath) {
   if (!fs.existsSync(configPath)) {
@@ -60,9 +61,12 @@ function convertCommentsToVoxTexts(marpComments, voxConfig) {
 }
 
 const program_name = "marp2vvtext";
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 program
   .name(program_name)
+  .version(version)
   .description(
     "Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する"
   )
