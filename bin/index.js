@@ -29,28 +29,31 @@ function convertCommentsToVoxTexts(marpComments, voxConfig) {
   const textsForVoicevox = [];
   let pageNo = 1;
   const pattern = /^:([\d+]):/;
+  let voiceName = "";
   for (const commentsInPage of marpComments) {
     let commentNo = 1;
     for (const cmt of commentsInPage) {
       const match = pattern.exec(cmt);
-      let voxText = cmt;
+      let voxText = "";
       if (match) {
         const placeholder = match[0];
         const characterNo = match[1];
-        let voiceName = "";
         if (characterNo in voxConfig) {
           voiceName = voxConfig[characterNo] + ",";
         } else {
           console.warn(
-            `不明なキャラクター番号(${characterNo})が検出されました。: ${pageNo}頁-${commentNo}番目`,
+            `不明なキャラクター番号(${characterNo})が検出されました。: ${pageNo}頁-${commentNo}番目`
           );
+          voiceName = "!!不明!!,";
         }
         voxText = cmt.replace(placeholder, voiceName);
+      } else {
+        voxText = `${voiceName}${cmt}`;
       }
       textsForVoicevox.push(voxText);
       commentNo += 1;
     }
-    textsForVoicevox.push(`@@${pageNo}`);
+    textsForVoicevox.push(`${voiceName}@@${pageNo}`);
     pageNo += 1;
   }
   return textsForVoicevox;
@@ -61,16 +64,16 @@ const program_name = "marp2vvtext";
 program
   .name(program_name)
   .description(
-    "Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する",
+    "Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する"
   )
   .option(
     "-c, --config <config_path>",
     "音声キャラクターの設定ファイルパス",
-    "./vox.json",
+    "./vox.json"
   )
   .option(
     "-o, --output <output_path>",
-    "VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する",
+    "VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する"
   )
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
@@ -83,7 +86,7 @@ program
         const outputPath = path.resolve(options.output);
         if (fs.existsSync(outputPath)) {
           console.warn(
-            `出力先ファイルが既に存在するため処理を中止しました。: ${outputPath}`,
+            `出力先ファイルが既に存在するため処理を中止しました。: ${outputPath}`
           );
           process.exit(1);
         } else {
