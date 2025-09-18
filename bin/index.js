@@ -29,30 +29,33 @@ function getMarpComments(marpFilePath) {
 function convertCommentsToVoxTexts(marpComments, voxConfig) {
   const textsForVoicevox = [];
   let pageNo = 1;
-  const pattern = /^:([\d+]):/;
+  const pattern = /^\s*:([\d+]):/;
   let voiceName = "";
   for (const commentsInPage of marpComments) {
     let commentNo = 1;
     for (const cmt of commentsInPage) {
-      const match = pattern.exec(cmt);
-      let voxText = "";
-      if (match) {
-        const placeholder = match[0];
-        const characterNo = match[1];
-        if (characterNo in voxConfig) {
-          voiceName = voxConfig[characterNo] + ",";
+      const lines = cmt.split(/\r?\n/);
+      for (const line of lines) {
+        const match = pattern.exec(line);
+        let voxText = "";
+        if (match) {
+          const placeholder = match[0];
+          const characterNo = match[1];
+          if (characterNo in voxConfig) {
+            voiceName = voxConfig[characterNo] + ",";
+          } else {
+            console.warn(
+              `不明なキャラクター番号(${characterNo})が検出されました。: ${pageNo}頁-${commentNo}番目`
+            );
+            voiceName = "!!不明!!,";
+          }
+          voxText = line.replace(placeholder, voiceName);
         } else {
-          console.warn(
-            `不明なキャラクター番号(${characterNo})が検出されました。: ${pageNo}頁-${commentNo}番目`
-          );
-          voiceName = "!!不明!!,";
+          voxText = `${voiceName}${line}`;
         }
-        voxText = cmt.replace(placeholder, voiceName);
-      } else {
-        voxText = `${voiceName}${cmt}`;
+        textsForVoicevox.push(voxText);
+        commentNo += 1;
       }
-      textsForVoicevox.push(voxText);
-      commentNo += 1;
     }
     textsForVoicevox.push(`${voiceName}@@${pageNo}`);
     pageNo += 1;
@@ -79,6 +82,10 @@ program
     "-o, --output <output_path>",
     "VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する"
   )
+  .option(
+    "--force",
+    "出力先のVOICEVOX用テキストファイルが存在する場合、上書きする"
+  )
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
     try {
@@ -88,14 +95,19 @@ program
       let writeStream = process.stdout;
       if (options.output) {
         const outputPath = path.resolve(options.output);
-        if (fs.existsSync(outputPath)) {
+        if (fs.existsSync(outputPath) && !options.force) {
+          console.log(`force option: ${options.force}`);
           console.warn(
             `出力先ファイルが既に存在するため処理を中止しました。: ${outputPath}`
           );
           process.exit(1);
-        } else {
-          writeStream = fs.createWriteStream(outputPath, { encoding: "utf8" });
         }
+        if (fs.existsSync(outputPath)) {
+          console.warn(
+            `出力先ファイルが存在するため上書きします。: ${outputPath}`
+          );
+        }
+        writeStream = fs.createWriteStream(outputPath, { encoding: "utf8" });
       }
       try {
         for (const text of voxTexts) {
