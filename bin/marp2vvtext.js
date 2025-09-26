@@ -124,7 +124,14 @@ program
 
 program.exitOverride((err) => {
   let args = program.args || [];
-  if (!(args.includes("-h") || args.includes("--help"))) {
+  if (
+    !(
+      args.includes("-h") ||
+      args.includes("--help") ||
+      args.includes("-V") ||
+      args.includes("--version")
+    )
+  ) {
     console.error(""); // 空行
     program.outputHelp();
     process.exit(err.exitCode);
