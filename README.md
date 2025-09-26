@@ -1,31 +1,26 @@
-# marp2vvtext
+# my-marp-utils
 
-Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換するCLIツールです.
+marpファイルから動画を作成するためのユーティリティツールを提供する。
 
 ## インストール
 
+本リポジトリをクローンしたディレクトリに移動後、以下を実行し、ユーティリティツールをインストールします。
+
 ```shell
-$ npm clean-install
-$ npm install -g .
-$ marp2vvtext -V
-1.0.1
-
-Usage: marp2vvtext [options] <marp_file_path>
-
-Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する
-
-Arguments:
-  marp_file_path              原稿となるMarpファイルパス
-
-Options:
-  -V, --version               output the version number
-  -c, --config <config_path>  音声キャラクターの設定ファイルパス (default: "./vox.json")
-  -o, --output <output_path>  VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する
-  --force                     出力先のVOICEVOX用テキストファイルが存在する場合、上書きする
-  -h, --help                  display help for command
+npm install --package-lock-only -g .
 ```
 
+以下のツールがインストールされます。
+
+| ツール        | 説明                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| marp2vvtext   | Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する               |
+| marp2cliptext | Marpファイルからスライドに挿入するクリップ用のコメントを抽出し、テキストファイルに変換する |
+| marp2titles   | Marpファイルからスライドのタイトル一覧を取得する                                           |
+
 ## 使い方
+
+### marp2vvtext
 
 ```shell
 $ marp2vvtext --help
@@ -44,7 +39,40 @@ Options:
   -h, --help                  display help for command
 ```
 
-## 例
+### marp2cliptext
+
+```shell
+$ marp2cliptext --help
+Usage: marp2cliptext [options] <marp_file_path>
+
+Marpファイルからスライドに挿入するクリップ用のコメントを抽出し、テキストファイルに変換する
+
+Arguments:
+  marp_file_path             原稿となるMarpファイルパス
+
+Options:
+  -V, --version              output the version number
+  -o, --output <output_dir>  テキストファイルを出力するディレクトリパス
+  -h, --help                 display help for command
+```
+
+### marp2titles
+
+```shell
+Usage: marp2titles [options] <marp_file_path>
+
+Marpファイルからスライドのタイトル一覧を取得する
+
+Arguments:
+  marp_file_path              原稿となるMarpファイルパス
+
+Options:
+  -V, --version               output the version number
+  -o, --output <output_file>  テキストファイルを出力するファイルパス
+  -h, --help                  display help for command
+```
+
+## marp2vvtextの例
 
 [sample](./sample/)内の[設定ファイル](./sample/vox.json)を使って、[Marpファイル](./sample/slide.md)を変換する場合、以下を実行します。
 
@@ -72,7 +100,7 @@ $ cat scenario.txt
 @@5
 ```
 
-## 仕組み
+### 仕組み
 
 本ツールは、[Marpファイル](./sample/slide.md)内の HTMLコメント部分 [^1] を抽出し、[VOICEVOXのテキストファイル](https://voicevox.hiroshiba.jp/how_to_use/#%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF)の形式に変換します。
 
@@ -167,10 +195,9 @@ Marpファイルのコメントの**キャラクター記号**は、実際の**�
 
 ## 更新履歴
 
-### v1.0.1
+### v1.0.0
 
-- コマンドの出力形式をvoicevoxのテキスト出力形式にあわせて、各行にキャラクター名を付与するように修正
-- CLIオプションでバージョン情報を表示可能に。package.jsonのバージョン情報を表示するように修正
+- 3つのツールを提供
 
 [^1]: ただし、`_class`などの[Directives](https://marpit.marp.app/directives?id=directives)のコメントは除く
 
