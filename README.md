@@ -33,7 +33,7 @@ Arguments:
 
 Options:
   -V, --version               output the version number
-  -c, --config <config_path>  音声キャラクターの設定ファイルパス (default: "./vox.json")
+  -c, --config <config_path>  音声キャラクターの設定ファイルパス.未指定時はMarpファイルのあるディレクトリの`vox.json`となる
   -o, --output <output_path>  VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する
   --force                     出力先のVOICEVOX用テキストファイルが存在する場合、上書きする
   -h, --help                  display help for command
@@ -194,6 +194,10 @@ Marpファイルのコメントの**キャラクター記号**は、実際の**�
 ```
 
 ## 更新履歴
+
+### v1.0.1
+
+- `marp2vvtext`の`--config`オプションが未指定時は、marpファイルと同じディレクトリの`vox.json` を参照するように修正
 
 ### v1.0.0
 

@@ -75,8 +75,7 @@ program
   )
   .option(
     "-c, --config <config_path>",
-    "音声キャラクターの設定ファイルパス",
-    "./vox.json"
+    "音声キャラクターの設定ファイルパス.未指定時はMarpファイルのあるディレクトリの`vox.json`となる"
   )
   .option(
     "-o, --output <output_path>",
@@ -89,8 +88,14 @@ program
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
     try {
-      const voxConfig = getVoxConfig(path.resolve(options.config));
-      const comments = getMarpComments(path.resolve(marp_file_path));
+      const marp_abs_path = path.resolve(marp_file_path);
+      const comments = getMarpComments(marp_abs_path);
+
+      let config_path = path.join(path.dirname(marp_abs_path), "vox.json");
+      if (options.config) {
+        config_path = path.resolve(options.config);
+      }
+      const voxConfig = getVoxConfig(config_path);
       const voxTexts = convertCommentsToVoxTexts(comments, voxConfig);
       let writeStream = process.stdout;
       if (options.output) {
