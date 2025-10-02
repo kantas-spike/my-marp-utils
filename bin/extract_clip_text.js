@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { program } from "commander";
 import { createRequire } from "node:module";
+import { exec } from "node:child_process";
 
 function getClipInfo(marpFilePath) {
   if (!fs.existsSync(marpFilePath)) {
@@ -46,6 +47,14 @@ program
     "-o, --output <output_dir>",
     "テキストファイルを出力するディレクトリパス"
   )
+  .option(
+    "--pdf",
+    "出力したテキストファイルをcupsfilterを使ってPDFに変換する(macOS用)"
+  )
+  .option(
+    "--delete-org-file",
+    "PDFに変換時にオリジナルのテキストファイルを削除する"
+  )
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
     try {
@@ -76,7 +85,27 @@ program
         const fileName = info.slideNo.toString().padStart(2, "0") + ".txt";
         const outputFile = path.join(outputDir, fileName);
         fs.writeFileSync(outputFile, info.cmment.join("\n"));
-        console.log(`  ${fileName}`);
+        console.log(`  create ${fileName}...`);
+        if (options.pdf) {
+          const pdfFileName = path.basename(fileName, ".txt") + ".pdf";
+          const outputPdfFile = path.join(outputDir, pdfFileName);
+          let cupsOptions = "";
+          if (options.deleteOrgFile) {
+            cupsOptions += "-D ";
+          }
+          console.log(
+            `  cupsutil ${cupsOptions} ${fileName} > ${pdfFileName}...`
+          );
+          exec(
+            `/usr/sbin/cupsfilter ${cupsOptions} "${outputFile}" > "${outputPdfFile}"`,
+            (err, stdout, stderr) => {
+              if (err) {
+                console.error(`PDF変換に失敗しました: ${err}`);
+                return;
+              }
+            }
+          );
+        }
       }
     } catch (err) {
       console.error(err);
