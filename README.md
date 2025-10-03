@@ -12,11 +12,10 @@ npm install -g .
 
 以下のツールがインストールされます。
 
-| ツール        | 説明                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------ |
-| marp2vvtext   | Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する               |
-| marp2cliptext | Marpファイルからスライドに挿入するクリップ用のコメントを抽出し、テキストファイルに変換する |
-| marp2titles   | Marpファイルからスライドのタイトル一覧を取得する                                           |
+| ツール      | 説明                                                                         |
+| ----------- | ---------------------------------------------------------------------------- |
+| marp2vvtext | Marpファイルからコメントを抽出し、VOICEVOXで読み込み可能なテキストに変換する |
+| marp2titles | Marpファイルからスライドのタイトル一覧を取得する                             |
 
 ## 使い方
 
@@ -37,23 +36,6 @@ Options:
   -o, --output <output_path>  VOICEVOX用テキストファイルを保存するファイルパス. 本オプション未指定時は標準出力に変換結果を出力する
   --force                     出力先のVOICEVOX用テキストファイルが存在する場合、上書きする
   -h, --help                  display help for command
-```
-
-### marp2cliptext
-
-```shell
-$ marp2cliptext --help
-Usage: marp2cliptext [options] <marp_file_path>
-
-Marpファイルからスライドに挿入するクリップ用のコメントを抽出し、テキストファイルに変換する
-
-Arguments:
-  marp_file_path             原稿となるMarpファイルパス
-
-Options:
-  -V, --version              output the version number
-  -o, --output <output_dir>  テキストファイルを出力するディレクトリパス
-  -h, --help                 display help for command
 ```
 
 ### marp2titles
@@ -194,6 +176,10 @@ Marpファイルのコメントの**キャラクター記号**は、実際の**�
 ```
 
 ## 更新履歴
+
+### v1.0.3
+
+- `marp2cliptext`を削除し、独立したプロジェクトに移動
 
 ### v1.0.2
 

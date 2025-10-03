@@ -1,13 +1,12 @@
 {
   "name": "my-marp-utils",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "marpファイルから動画を作成するためのユーティリティツールを提供する。",
   "license": "MIT",
   "author": "",
   "type": "module",
   "bin": {
     "marp2vvtext": "./bin/marp2vvtext.js",
-    "marp2cliptext": "./bin/extract_clip_text.js",
     "marp2titles": "./bin/extract_titles.js"
   },
   "scripts": {
