@@ -54,6 +54,7 @@ program
     "-o, --output <output_file>",
     "テキストファイルを出力するファイルパス"
   )
+  .option("--force", "出力先ファイルが既に存在する場合に上書きする")
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
     try {
@@ -68,16 +69,18 @@ program
 
       const outputPath = path.resolve(options.output);
       if (fs.existsSync(outputPath)) {
-        // 同名のファイルが存在する場合、エラー
-        if (!fs.lstatSync(outputPath).isFile()) {
+        if (options.force) {
           console.warn(
-            `指定された出力ファイルと同名のファイル(${outputPath})が既に存在します。`
+            `上書きオプションが指定されたため、ファイル(${outputPath})を上書きします。`
+          );
+        } else {
+          console.warn(
+            `指定された出力ファイルと同名のファイル(${outputPath})が既に存在するため処理を終了します。`
           );
           process.exit(1);
         }
-      } else {
-        fs.writeFileSync(outputPath, JSON.stringify(info, null, "    "));
       }
+      fs.writeFileSync(outputPath, JSON.stringify(info, null, "    "));
     } catch (err) {
       console.error(err);
       process.exit(-1);
