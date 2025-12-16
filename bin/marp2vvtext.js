@@ -98,8 +98,9 @@ program
       const voxConfig = getVoxConfig(config_path);
       const voxTexts = convertCommentsToVoxTexts(comments, voxConfig);
       let writeStream = process.stdout;
+      let outputPath = undefined;
       if (options.output) {
-        const outputPath = path.resolve(options.output);
+        outputPath = path.resolve(options.output);
         if (fs.existsSync(outputPath) && !options.force) {
           console.log(`force option: ${options.force}`);
           console.warn(
@@ -117,6 +118,11 @@ program
       try {
         for (const text of voxTexts) {
           writeStream.write(text + "\n");
+        }
+        if (outputPath) {
+          console.info(
+            `VOICEVOX用テキストファイルを作成しました。: ${outputPath}`
+          );
         }
       } finally {
         writeStream.end();

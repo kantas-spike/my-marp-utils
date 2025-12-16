@@ -50,10 +50,7 @@ program
   .name(program_name)
   .version(version)
   .description("Marpファイルからスライドのタイトル一覧を取得する")
-  .option(
-    "-o, --output <output_file>",
-    "テキストファイルを出力するファイルパス"
-  )
+  .option("-o, --output <output_file>", "タイトル一覧を出力するファイルパス")
   .option("--force", "出力先ファイルが既に存在する場合に上書きする")
   .argument("<marp_file_path>", "原稿となるMarpファイルパス")
   .action((marp_file_path, options) => {
@@ -81,6 +78,7 @@ program
         }
       }
       fs.writeFileSync(outputPath, JSON.stringify(info, null, "    "));
+      console.info(`タイトル一覧を作成しました。: ${outputPath}`);
     } catch (err) {
       console.error(err);
       process.exit(-1);
